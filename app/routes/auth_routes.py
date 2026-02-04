@@ -118,8 +118,14 @@ def signup():
 # ---------- GOOGLE AUTH ----------
 @auth_bp.route("/auth/google")
 def auth_google():
+    # Force HTTPS for the redirect URL in production
     redirect_url = url_for("auth.auth_callback", _external=True)
-    return redirect(google_oauth_login(redirect_url))
+    if not request.host.startswith('localhost') and not request.host.startswith('127.0.0.1'):
+        redirect_url = redirect_url.replace("http://", "https://")
+    
+    auth_url = google_oauth_login(redirect_url)
+    print(f"DEBUG: Generating Google Auth URL with redirect: {redirect_url}")
+    return redirect(auth_url)
 
 
 @auth_bp.route("/auth/callback")
@@ -129,14 +135,20 @@ def auth_callback():
         flash("Google login failed.", "error")
         return redirect(url_for("auth.login"))
 
-    redirect_url = url_for("auth.auth_callback", _external=True)
-
     try:
+        # Force HTTPS for the redirect URL in production
+        redirect_url = url_for("auth.auth_callback", _external=True)
+        if not request.host.startswith('localhost') and not request.host.startswith('127.0.0.1'):
+            redirect_url = redirect_url.replace("http://", "https://")
+
+        print(f"DEBUG: Exchanging code for session. Redirect URI: {redirect_url}")
         res = exchange_google_code(code, redirect_url)
 
         if not res or not res.user:
-            session.clear() # Clear any partial session
-            flash("Google login failed.", "error")
+            error_msg = getattr(res, 'error', 'Unknown Error')
+            print(f"DEBUG: Code exchange failed. Response: {res} | Error: {error_msg}")
+            session.clear()
+            flash(f"Google login failed: {error_msg}", "error")
             return redirect(url_for("auth.login"))
 
         user = res.user
@@ -166,9 +178,11 @@ def auth_callback():
         return redirect(url_for("dashboard.dashboard"))
 
     except Exception as e:
-        print("OAuth error:", e)
+        import traceback
+        error_trace = traceback.format_exc()
+        print(f"DEBUG: OAuth error: {str(e)}\n{error_trace}")
         session.clear() # Always clear on error
-        flash("Google login failed. Please try again.", "error")
+        flash(f"Google login failed: {str(e)}", "error")
         return redirect(url_for("auth.login"))
 
 
