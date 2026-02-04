@@ -4,5 +4,4 @@ supabase
 pdfplumber
 python-docx
 google-genai
-supabase
 reportlab
