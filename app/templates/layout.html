@@ -66,14 +66,18 @@
 
                 <div class="hidden sm:flex items-center space-x-8">
                     {% if session.user %}
+                    {% if session.user.username %}
                     <a href="{{ url_for('dashboard.dashboard') }}"
                         class="text-slate-600 hover:text-primary font-bold text-sm transition-colors">Dashboard</a>
                     <a href="{{ url_for('resume.history') }}"
                         class="text-slate-600 hover:text-primary font-bold text-sm transition-colors">History</a>
                     <div class="h-5 w-px bg-slate-200"></div>
+                    {% endif %}
                     <div class="flex items-center space-x-3">
-                        <span class="text-xs font-bold text-navy uppercase tracking-wider">Hi, {{ session.user.username
-                            }}</span>
+                        <span class="text-xs font-bold text-navy uppercase tracking-wider">
+                            {% if session.user.username %}Hi, {{ session.user.username }}{% else %}Identity Pending{%
+                            endif %}
+                        </span>
                         <a href="{{ url_for('auth.logout') }}"
                             class="btn-secondary btn px-5 py-2 text-xs uppercase tracking-widest rounded-lg">
                             Logout
@@ -103,10 +107,12 @@
         <div id="mobile-menu" class="hidden sm:hidden border-t border-slate-100 bg-white/95 backdrop-blur-md">
             <div class="px-4 pt-4 pb-6 space-y-2">
                 {% if session.user %}
+                {% if session.user.username %}
                 <a href="{{ url_for('dashboard.dashboard') }}"
                     class="block px-4 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl">Dashboard</a>
                 <a href="{{ url_for('resume.history') }}"
                     class="block px-4 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl">History</a>
+                {% endif %}
                 <a href="{{ url_for('auth.logout') }}"
                     class="block px-4 py-3 text-red-600 font-bold hover:bg-red-50 rounded-xl">Logout</a>
                 {% else %}

@@ -19,6 +19,40 @@
 
         <form method="POST" class="space-y-5">
             <div>
+                <label for="username"
+                    class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-4 flex items-center">
+                    <span class="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center mr-2 text-primary">
+                        <i class="fas fa-at text-[8px]"></i>
+                    </span>
+                    Handle / Username
+                </label>
+                <input type="text" id="username" name="username" required
+                    class="block w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-sm"
+                    placeholder="e.g. madhav_swami">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label for="first_name"
+                        class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-4 flex items-center">
+                        First Name
+                    </label>
+                    <input type="text" id="first_name" name="first_name" required
+                        class="block w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-sm"
+                        placeholder="Madhav">
+                </div>
+                <div>
+                    <label for="last_name"
+                        class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-4 flex items-center">
+                        Last Name
+                    </label>
+                    <input type="text" id="last_name" name="last_name" required
+                        class="block w-full px-5 py-3 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-sm"
+                        placeholder="Swami">
+                </div>
+            </div>
+
+            <div>
                 <label for="bio"
                     class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-4 flex items-center">
                     <span class="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center mr-2 text-primary">
@@ -26,7 +60,7 @@
                     </span>
                     Professional Narrative
                 </label>
-                <textarea id="bio" name="bio" rows="5" required
+                <textarea id="bio" name="bio" rows="4"
                     class="block w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-sm leading-relaxed resize-none"
                     placeholder="Architect your brief bio..."></textarea>
             </div>

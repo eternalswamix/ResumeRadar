@@ -12,6 +12,9 @@ def dashboard():
     if "user" not in session:
         return redirect(url_for("auth.login"))
 
+    if not session["user"].get("username"):
+        return redirect(url_for("auth.complete_profile"))
+
     # Fetch user's resumes
     res = supabase.table("resumes") \
         .select("ats_score") \

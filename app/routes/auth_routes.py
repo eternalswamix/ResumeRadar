@@ -135,6 +135,7 @@ def auth_callback():
         res = exchange_google_code(code, redirect_url)
 
         if not res or not res.user:
+            session.clear() # Clear any partial session
             flash("Google login failed.", "error")
             return redirect(url_for("auth.login"))
 
@@ -143,12 +144,14 @@ def auth_callback():
         profile = supabase.table("profiles").select("*").eq("id", user.id).execute()
         profile_data = profile.data[0] if profile.data else None
 
+        # Set minimal user info
         session["user"] = {
             "id": user.id,
             "email": user.email
         }
 
         if not profile_data:
+            # Create shell profile
             supabase.table("profiles").insert({
                 "id": user.id,
                 "email": user.email
@@ -159,11 +162,13 @@ def auth_callback():
             return redirect(url_for("auth.complete_profile"))
 
         session["user"]["username"] = profile_data["username"]
+        flash(f"Welcome back, {profile_data['username']}!", "success")
         return redirect(url_for("dashboard.dashboard"))
 
     except Exception as e:
         print("OAuth error:", e)
-        flash("Google login failed.", "error")
+        session.clear() # Always clear on error
+        flash("Google login failed. Please try again.", "error")
         return redirect(url_for("auth.login"))
 
 
@@ -177,13 +182,15 @@ def complete_profile():
         username = request.form.get("username")
         first_name = request.form.get("first_name")
         last_name = request.form.get("last_name")
+        bio = request.form.get("bio")
 
-        if not username:
-            flash("Username is required", "error")
+        if not username or not first_name or not last_name:
+            flash("Username, First Name, and Last Name are required", "error")
             return render_template("complete_profile.html")
 
         try:
-            existing = supabase.table("profiles").select("id").eq("username", username).execute()
+            # Check if username is already taken by someone else
+            existing = supabase.table("profiles").select("id").eq("username", username).neq("id", session["user"]["id"]).execute()
             if existing.data:
                 flash("Username already taken", "error")
                 return render_template("complete_profile.html")
@@ -191,7 +198,8 @@ def complete_profile():
             supabase.table("profiles").update({
                 "username": username,
                 "first_name": first_name,
-                "last_name": last_name
+                "last_name": last_name,
+                "bio": bio
             }).eq("id", session["user"]["id"]).execute()
 
             # Update session with username

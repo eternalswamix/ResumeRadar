@@ -11,6 +11,10 @@ resume_bp = Blueprint("resume", __name__)
 def upload():
     if "user" not in session:
         return redirect(url_for("auth.login"))
+    
+    if not session["user"].get("username"):
+        return redirect(url_for("auth.complete_profile"))
+
     return render_template("upload.html")
 
 # ---------- ANALYZE ----------
@@ -18,6 +22,9 @@ def upload():
 def analyze():
     if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    if not session["user"].get("username"):
+        return redirect(url_for("auth.complete_profile"))
 
     resume_file = request.files.get("resume")
     job_description = request.form.get("job_description")
@@ -45,6 +52,9 @@ def analyze():
 def history():
     if "user" not in session:
         return redirect(url_for("auth.login"))
+
+    if not session["user"].get("username"):
+        return redirect(url_for("auth.complete_profile"))
 
     res = supabase.table("resumes") \
         .select("*") \
