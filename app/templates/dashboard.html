@@ -1,0 +1,114 @@
+{% extends "layout.html" %}
+
+{% block title %}Dashboard | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+    <!-- Header/Hero -->
+    <div class="relative bg-navy rounded-[2rem] p-8 md:p-12 mb-8 overflow-hidden shadow-xl">
+        <div class="absolute inset-0 bg-gradient-to-br from-emerald-500/10 to-transparent"></div>
+        <div class="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div>
+                <div
+                    class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 text-[10px] font-bold uppercase tracking-widest mb-4 border border-emerald-500/20">
+                    <i class="fas fa-chart-line mr-2"></i> Performance
+                </div>
+                <h1 class="text-3xl md:text-4xl font-extrabold font-display text-white mb-4 italic">
+                    Hello, <span class="text-primary italic">{{ session.user.username }}</span>.
+                </h1>
+                <p class="text-slate-400 text-sm max-w-md font-medium leading-relaxed">
+                    Monitor your resume optimization progress in real-time within your renovated command center.
+                </p>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="{{ url_for('resume.upload') }}"
+                    class="btn btn-primary px-8 py-3.5 rounded-full text-sm shadow-xl shadow-emerald-500/10">
+                    <i class="fas fa-plus-circle mr-2"></i> New Analysis
+                </a>
+            </div>
+        </div>
+        <!-- Decorative bg -->
+        <div class="absolute -bottom-16 -right-16 w-64 h-64 bg-primary/5 rounded-full blur-[80px]"></div>
+    </div>
+
+    <!-- Horizontal Stats Strip -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+        <div
+            class="bg-white border border-slate-100 p-6 rounded-2xl flex items-center group hover:border-primary/30 transition-all">
+            <div
+                class="bg-emerald-50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:scale-105 transition-transform">
+                <i class="fas fa-gauge-high text-primary text-xl"></i>
+            </div>
+            <div>
+                <p class="text-slate-400 font-bold text-[9px] uppercase tracking-widest mb-1">Avg Score</p>
+                <div class="flex items-baseline space-x-1">
+                    <span class="text-2xl font-extrabold text-navy font-display">{{ avg_score }}</span>
+                    <span class="text-slate-400 font-bold text-xs">%</span>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-white border border-slate-100 p-6 rounded-2xl flex items-center group hover:border-primary/30 transition-all">
+            <div
+                class="bg-slate-50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:scale-105 transition-transform">
+                <i class="fas fa-layer-group text-slate-400 text-xl group-hover:text-primary transition-colors"></i>
+            </div>
+            <div>
+                <p class="text-slate-400 font-bold text-[9px] uppercase tracking-widest mb-1">Total Resumes</p>
+                <span class="text-2xl font-extrabold text-navy font-display">{{ resumes_count }}</span>
+            </div>
+        </div>
+
+        <div
+            class="bg-white border border-slate-100 p-6 rounded-2xl flex items-center group hover:border-primary/30 transition-all">
+            <div
+                class="bg-emerald-50 w-12 h-12 rounded-xl flex items-center justify-center mr-5 group-hover:scale-105 transition-transform">
+                <i class="fas fa-crown text-primary text-xl"></i>
+            </div>
+            <div>
+                <p class="text-slate-400 font-bold text-[9px] uppercase tracking-widest mb-1">Best Match</p>
+                <div class="flex items-baseline space-x-1">
+                    <span class="text-2xl font-extrabold text-navy font-display">{{ best_score }}</span>
+                    <span class="text-slate-400 font-bold text-xs">%</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Renovated Quick Actions -->
+    <div class="space-y-4">
+        <div class="horizontal-feature group">
+            <div
+                class="bg-emerald-500 text-white w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover:rotate-6 transition-transform">
+                <i class="fas fa-wand-sparkles text-xl"></i>
+            </div>
+            <div class="flex-grow">
+                <h3 class="text-xl font-extrabold text-navy mb-0.5 tracking-tight">Resume Optimizer</h3>
+                <p class="text-slate-500 font-medium text-xs">Deep-dive AI benchmarking for your latest credentials.</p>
+            </div>
+            <div class="shrink-0">
+                <a href="{{ url_for('resume.upload') }}" class="btn btn-primary px-6 py-2.5 rounded-full text-xs">
+                    Start <i class="fas fa-chevron-right ml-2 text-[8px]"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="horizontal-feature group border-navy/5 bg-slate-50/50">
+            <div
+                class="bg-navy text-white w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 group-hover:rotate-6 transition-transform">
+                <i class="fas fa-scroll text-xl"></i>
+            </div>
+            <div class="flex-grow">
+                <h3 class="text-xl font-extrabold text-navy mb-0.5 tracking-tight">Audit History</h3>
+                <p class="text-slate-500 font-medium text-xs">Revisit previous analyses and track improvements.</p>
+            </div>
+            <div class="shrink-0">
+                <a href="{{ url_for('resume.history') }}" class="btn-secondary btn px-6 py-2.5 rounded-full text-xs">
+                    Logs <i class="fas fa-chevron-right ml-2 text-[8px]"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

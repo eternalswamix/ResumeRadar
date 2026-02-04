@@ -1,0 +1,97 @@
+{% extends "layout.html" %}
+
+{% block title %}Sign Up | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto py-12 px-4">
+    <div
+        class="relative bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-10 shadow-2xl animate-fadeInScale overflow-hidden">
+        <!-- Brand Header -->
+        <div class="text-center mb-10">
+            <div
+                class="bg-emerald-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group hover:rotate-6 transition-transform">
+                <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo" class="w-8 h-8 object-contain">
+            </div>
+            <h1 class="text-3xl font-extrabold font-display text-navy mb-2 italic">Create <span
+                    class="text-primary italic">Identity</span></h1>
+            <p class="text-slate-400 font-medium text-xs">Join the top 1% of career architects.</p>
+        </div>
+
+        <form method="POST" class="space-y-4">
+            <div>
+                <label for="username"
+                    class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-2 px-1">Identity
+                    Tag</label>
+                <div class="relative group">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+                        <i class="fas fa-user-tag text-sm"></i>
+                    </div>
+                    <input type="text" id="username" name="username" required
+                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-[13px]"
+                        placeholder="johndoe">
+                </div>
+            </div>
+
+            <div>
+                <label for="email"
+                    class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-2 px-1">Email
+                    Protocol</label>
+                <div class="relative group">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+                        <i class="fas fa-at text-sm"></i>
+                    </div>
+                    <input type="email" id="email" name="email" required
+                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-[13px]"
+                        placeholder="name@company.com">
+                </div>
+            </div>
+
+            <div>
+                <label for="password"
+                    class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-2 px-1">Access
+                    Key</label>
+                <div class="relative group">
+                    <div
+                        class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-primary transition-colors">
+                        <i class="fas fa-shield-halved text-sm"></i>
+                    </div>
+                    <input type="password" id="password" name="password" required
+                        class="block w-full pl-11 pr-4 py-3.5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-[13px]"
+                        placeholder="••••••••">
+                </div>
+                <p class="text-[9px] text-slate-400 font-bold uppercase tracking-widest mt-2 ml-1 opacity-60">Use a
+                    strong, complex password</p>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit"
+                    class="w-full btn btn-primary py-4 rounded-full text-base font-bold shadow-xl shadow-emerald-500/10 hover:translate-y-[-1px] active:translate-y-0 transition-all">
+                    Register Identity
+                </button>
+            </div>
+        </form>
+
+        <div class="relative my-8">
+            <div class="absolute inset-0 flex items-center">
+                <div class="w-full border-t border-slate-100"></div>
+            </div>
+            <div class="relative flex justify-center text-xs uppercase tracking-[0.2em] font-bold">
+                <span class="px-4 bg-white text-slate-300">Social Connect</span>
+            </div>
+        </div>
+
+        <a href="{{ url_for('auth.auth_google') }}"
+            class="w-full flex items-center justify-center space-x-4 btn bg-white border border-slate-100 text-navy hover:bg-slate-50 py-4 rounded-2xl font-bold transition-all shadow-sm">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-6 h-6" alt="Google">
+            <span>Continue with Google</span>
+        </a>
+
+        <p class="mt-8 text-center text-slate-400 font-medium text-sm">
+            Already verified?
+            <a href="{{ url_for('auth.login') }}" class="text-primary font-bold hover:underline">Log In</a>
+        </p>
+    </div>
+</div>
+{% endblock %}

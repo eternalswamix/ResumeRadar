@@ -1,0 +1,102 @@
+{% extends "layout.html" %}
+
+{% block title %}Analysis History | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-12 px-4">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between mb-12 gap-6 text-center lg:text-left">
+        <div>
+            <div
+                class="inline-flex items-center px-3 py-1 rounded-full bg-slate-50 text-slate-400 text-[9px] font-bold uppercase tracking-widest mb-4 border border-slate-100">
+                <i class="fas fa-archive mr-2"></i> Audit Logs
+            </div>
+            <h1 class="text-3xl md:text-4xl font-extrabold font-display text-navy mb-3 italic">Historical Vault</h1>
+            <p class="text-slate-500 text-sm font-medium">Review your career evolution and benchmark tracking.</p>
+        </div>
+        <a href="{{ url_for('resume.upload') }}"
+            class="btn btn-primary px-8 py-3 rounded-full shadow-lg shadow-emerald-500/5 mb-1 text-sm">
+            <i class="fas fa-plus mr-2 text-[10px]"></i> New Audit
+        </a>
+    </div>
+
+    {% if resumes %}
+    <div class="space-y-4">
+        {% for resume in resumes %}
+        <div
+            class="bg-white border border-slate-100 rounded-[2rem] p-1 shadow-md hover:border-primary/20 transition-all">
+            <div class="flex flex-col lg:flex-row items-center gap-6 lg:gap-0">
+                <!-- Score Strip -->
+                <div
+                    class="bg-navy rounded-[1.8rem] p-6 lg:w-48 shrink-0 flex flex-col items-center justify-center text-center">
+                    <div class="relative w-20 h-20 mb-3">
+                        <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none" stroke="#22c55e" stroke-width="3"
+                                stroke-dasharray="{{ resume.ats_score }}, 100" stroke-linecap="round" />
+                        </svg>
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-xl font-extrabold text-white font-display">{{ resume.ats_score }}%</span>
+                        </div>
+                    </div>
+                    <span class="text-[8px] uppercase tracking-widest font-bold text-slate-500">Benchmark</span>
+                </div>
+
+                <!-- Info Section -->
+                <div class="flex-grow px-6 py-2 lg:border-r border-slate-100 text-center lg:text-left">
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-2 mb-2">
+                        <span class="text-[9px] font-bold text-slate-300 font-mono tracking-tighter">#{{ resume.id[:8]
+                            }}</span>
+                        <span
+                            class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded-full text-[8px] font-bold uppercase tracking-wider border border-emerald-100">
+                            <i class="far fa-calendar-alt mr-1.5"></i> {{
+                            resume.created_at|strptime('%Y-%m-%dT%H:%M:%S.%f%z')|strftime('%b %d, %Y') }}
+                        </span>
+                    </div>
+                    <h3 class="text-xl font-extrabold text-navy font-display mb-3">Resume Optimization Log</h3>
+                    <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4">
+                        <div class="flex items-center text-slate-400 font-bold text-[9px] uppercase tracking-widest">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 mr-2"></span>
+                            {{ resume.matched_skills|length }} Skills
+                        </div>
+                        <div class="flex items-center text-slate-400 font-bold text-[9px] uppercase tracking-widest">
+                            <span class="w-1.5 h-1.5 rounded-full bg-rose-500 mr-2"></span>
+                            {{ resume.missing_skills|length }} Gaps
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Actions Strip -->
+                <div class="shrink-0 px-8 flex lg:flex-col gap-3 py-6">
+                    <button
+                        class="bg-slate-50 text-slate-400 px-5 py-2 rounded-full text-[9px] font-bold uppercase tracking-widest border border-slate-100 opacity-50 cursor-not-allowed">
+                        View
+                    </button>
+                    <a href="#"
+                        class="text-primary font-bold text-[9px] uppercase tracking-[0.2em] text-center hover:bg-emerald-50 py-1.5 rounded-lg transition-colors opacity-50 cursor-not-allowed">
+                        PDF
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% else %}
+<div class="bg-white border border-slate-100 border-dashed rounded-[3rem] py-32 text-center shadow-xl">
+    <div class="bg-slate-50 w-28 h-28 rounded-[2rem] flex items-center justify-center mx-auto mb-10">
+        <i class="fas fa-folder-open text-slate-200 text-4xl"></i>
+    </div>
+    <h3 class="text-3xl font-extrabold font-display text-navy mb-4">The vault is currently empty.</h3>
+    <p class="text-slate-500 mb-12 max-w-sm mx-auto font-medium leading-relaxed">
+        Run your first analysis to begin tracking your resume's professional growth and benchmark performance.
+    </p>
+    <a href="{{ url_for('resume.upload') }}"
+        class="btn btn-primary px-12 py-5 rounded-full text-lg shadow-2xl shadow-emerald-500/10">
+        Analyze First Resume
+    </a>
+</div>
+{% endif %}
+</div>
+{% endblock %}

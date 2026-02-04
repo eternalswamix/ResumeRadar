@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ResumeRadar | AI Resume Optimizer{% endblock %}</title>
+
+    <!-- Tailwind and Icons -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            DEFAULT: '#0d9488',
+                            hover: '#0f766e',
+                        },
+                        navy: {
+                            DEFAULT: '#0f172a',
+                            light: '#1e293b',
+                        },
+                        emerald: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/globals.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='image/logo.png') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+
+<body class="bg-white text-slate-900 selection:bg-emerald-100 selection:text-emerald-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <a href="/" class="flex items-center group">
+                        <div
+                            class="bg-white p-1 rounded-lg group-hover:scale-105 transition-transform duration-300 shadow-sm border border-slate-100/50">
+                            <img src="{{ url_for('static', filename='image/logo.png') }}" alt="ResumeRadar Logo"
+                                class="w-7 h-7 object-contain">
+                        </div>
+                        <span class="ml-3 text-xl font-bold font-display tracking-tight text-navy">
+                            Resume<span class="text-primary">Radar</span>
+                        </span>
+                    </a>
+                </div>
+
+                <div class="hidden sm:flex items-center space-x-8">
+                    {% if session.user %}
+                    <a href="{{ url_for('dashboard.dashboard') }}"
+                        class="text-slate-600 hover:text-primary font-bold text-sm transition-colors">Dashboard</a>
+                    <a href="{{ url_for('resume.history') }}"
+                        class="text-slate-600 hover:text-primary font-bold text-sm transition-colors">History</a>
+                    <div class="h-5 w-px bg-slate-200"></div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-xs font-bold text-navy uppercase tracking-wider">Hi, {{ session.user.username
+                            }}</span>
+                        <a href="{{ url_for('auth.logout') }}"
+                            class="btn-secondary btn px-5 py-2 text-xs uppercase tracking-widest rounded-lg">
+                            Logout
+                        </a>
+                    </div>
+                    {% else %}
+                    <a href="{{ url_for('auth.login') }}"
+                        class="text-slate-600 hover:text-primary font-bold text-sm transition-colors">Login</a>
+                    <a href="{{ url_for('auth.signup') }}"
+                        class="btn btn-primary shadow-emerald-100 shadow-lg px-6 py-2 rounded-full text-sm">
+                        Get Started
+                    </a>
+                    {% endif %}
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="sm:hidden flex items-center">
+                    <button type="button" class="text-slate-600 p-2"
+                        onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden sm:hidden border-t border-slate-100 bg-white/95 backdrop-blur-md">
+            <div class="px-4 pt-4 pb-6 space-y-2">
+                {% if session.user %}
+                <a href="{{ url_for('dashboard.dashboard') }}"
+                    class="block px-4 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl">Dashboard</a>
+                <a href="{{ url_for('resume.history') }}"
+                    class="block px-4 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl">History</a>
+                <a href="{{ url_for('auth.logout') }}"
+                    class="block px-4 py-3 text-red-600 font-bold hover:bg-red-50 rounded-xl">Logout</a>
+                {% else %}
+                <a href="{{ url_for('auth.login') }}"
+                    class="block px-4 py-3 text-slate-600 font-bold hover:bg-slate-50 rounded-xl">Login</a>
+                <a href="{{ url_for('auth.signup') }}"
+                    class="block px-4 py-3 text-primary font-bold hover:bg-emerald-50 rounded-xl">Get Started</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="min-h-[calc(100vh-16rem)]">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        <div class="max-w-4xl mx-auto px-4 mt-8 space-y-3">
+            {% for category, message in messages %}
+            <div
+                class="p-5 rounded-2xl border flex items-center shadow-sm animate-fadeInScale {% if category == 'error' %}bg-rose-50 border-rose-100 text-rose-700{% else %}bg-emerald-50 border-emerald-100 text-emerald-700{% endif %}">
+                <div
+                    class="w-10 h-10 rounded-full flex items-center justify-center mr-4 {% if category == 'error' %}bg-rose-100{% else %}bg-emerald-100{% endif %}">
+                    <i
+                        class="fas {% if category == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
+                </div>
+                <span class="font-bold">{{ message }}</span>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-navy py-10 mt-16 text-white selection:bg-white/10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                <!-- Brand & Pitch -->
+                <div class="text-center md:text-left">
+                    <div class="flex items-center justify-center md:justify-start mb-3 group">
+                        <div class="bg-white p-1 rounded-lg mr-3 group-hover:rotate-6 transition-transform">
+                            <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo"
+                                class="w-5 h-5 object-contain">
+                        </div>
+                        <span class="text-lg font-bold font-display tracking-tight">Resume<span
+                                class="text-primary italic">Radar</span></span>
+                    </div>
+                    <p
+                        class="text-slate-500 font-medium text-[10px] max-w-xs mx-auto md:mx-0 leading-relaxed uppercase tracking-[0.05em]">
+                        Engineering career success through <br class="hidden md:block"> advanced linguistic
+                        intelligence.
+                    </p>
+                </div>
+
+                <!-- Central Social Connect -->
+                <div class="flex flex-col items-center">
+                    <div class="flex space-x-6">
+                        <a href="mailto:eternalswamix@gmail.com"
+                            class="text-slate-500 hover:text-emerald-400 transition-all hover:scale-110 duration-300"
+                            title="Email Protocol">
+                            <i class="fas fa-envelope text-lg"></i>
+                        </a>
+                        <a href="https://github.com/eternalswamix" target="_blank"
+                            class="text-slate-500 hover:text-white transition-all hover:scale-110 duration-300"
+                            title="Source Code">
+                            <i class="fab fa-github text-lg"></i>
+                        </a>
+                        <a href="https://x.com/eternalswamix" target="_blank"
+                            class="text-slate-500 hover:text-[#1DA1F2] transition-all hover:scale-110 duration-300"
+                            title="X (Twitter)">
+                            <i class="fab fa-twitter text-lg"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/madhav-swami/" target="_blank"
+                            class="text-slate-500 hover:text-[#0A66C2] transition-all hover:scale-110 duration-300"
+                            title="Professional Network">
+                            <i class="fab fa-linkedin-in text-lg"></i>
+                        </a>
+                    </div>
+                    <div class="mt-4 h-px w-8 bg-white/5"></div>
+                    <div class="mt-4 text-[9px] font-bold text-slate-600 uppercase tracking-[0.3em]">Operational
+                        Channels</div>
+                </div>
+
+                <!-- Rights & Version -->
+                <div class="text-center md:text-right">
+                    <div class="flex items-center justify-center md:justify-end mb-3">
+                        <div class="bg-white/5 border border-white/10 px-3 py-1 rounded-full flex items-center">
+                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse mr-2"></span>
+                            <span class="text-slate-400 font-bold text-[9px] uppercase tracking-widest">System
+                                Online</span>
+                        </div>
+                    </div>
+                    <div class="text-slate-600 text-[10px] font-bold uppercase tracking-widest">
+                        &copy; 2026 ResumeRadar <span class="mx-2 opacity-30">|</span> <span class="text-slate-700">v2.0
+                            Flash</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+
+</html>

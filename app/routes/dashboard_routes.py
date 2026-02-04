@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, redirect, url_for, session
-from db.supabase_client import supabase
+from app.db.supabase_client import supabase
 
 dashboard_bp = Blueprint("dashboard", __name__)
 

@@ -1,8 +1,8 @@
 from flask import Blueprint, request, render_template, redirect, url_for, session, send_file
-from services.resume_parser import extract_text
-from services.ats_service import analyze_resume_with_gemini, rewrite_resume
-from services.report_service import generate_pdf
-from db.supabase_client import supabase
+from app.services.resume_parser import extract_text
+from app.services.ats_service import analyze_resume_with_gemini, rewrite_resume
+from app.services.report_service import generate_pdf
+from app.db.supabase_client import supabase
 
 resume_bp = Blueprint("resume", __name__)
 

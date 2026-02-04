@@ -1,0 +1,141 @@
+{% extends "layout.html" %}
+
+{% block title %}Analysis Results | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto py-12 px-4">
+    <!-- Renovated Horizontal Score Card -->
+    <div class="bg-white rounded-[2rem] p-1 shadow-xl mb-8 overflow-hidden border border-slate-100">
+        <div class="flex flex-col lg:flex-row items-center gap-8 p-6 lg:p-10">
+            <div class="flex-grow text-center lg:text-left">
+                <div
+                    class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-primary text-[9px] font-bold uppercase tracking-widest mb-6 border border-emerald-100">
+                    <i class="fas fa-microchip mr-2"></i> AI Intelligence
+                </div>
+                <h1 class="text-3xl lg:text-4xl font-extrabold font-display text-navy mb-6 leading-tight italic">
+                    Benchmark <span class="text-primary">Report</span>
+                </h1>
+                <p class="text-slate-500 text-base font-medium max-w-lg leading-relaxed">
+                    We've audited your credentials against the target role requirements.
+                </p>
+            </div>
+
+            <!-- Horizontal Circular Score -->
+            <div
+                class="bg-navy rounded-[2.5rem] p-8 lg:p-10 flex flex-col items-center justify-center relative shrink-0 shadow-xl border border-white/5">
+                <div class="relative w-32 h-32 md:w-36 md:h-36">
+                    <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+                        <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="3" />
+                        <circle cx="18" cy="18" r="15.9155" fill="none"
+                            class="score-circle transition-all duration-1000" stroke="#22c55e" stroke-width="3"
+                            stroke-dasharray="{{ result.ats_score }}, 100" stroke-linecap="round" />
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span class="text-4xl font-extrabold font-display text-white">
+                            {{ result.ats_score }}<span class="text-sm text-emerald-500/50">%</span>
+                        </span>
+                        <span class="text-slate-500 font-bold uppercase tracking-[0.2em] text-[8px] mt-2">Match</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Strip: Skills -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-12">
+        <div
+            class="bg-white border border-slate-100 rounded-[2rem] p-8 group hover:border-emerald-500/20 transition-all shadow-md">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div
+                        class="bg-emerald-50 w-12 h-12 rounded-xl flex items-center justify-center mr-4 group-hover:scale-105 transition-transform">
+                        <i class="fas fa-check-double text-primary text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-extrabold text-navy font-display">Matched Skills</h3>
+                    </div>
+                </div>
+                <span class="bg-navy text-white px-3 py-1 rounded-lg text-[10px] font-bold font-mono">
+                    {{ result.matched_skills|length }}
+                </span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                {% for skill in result.matched_skills %}
+                <span
+                    class="bg-slate-50 text-slate-600 px-3 py-1.5 rounded-full font-bold text-xs border border-slate-100">
+                    {{ skill }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div
+            class="bg-white border border-slate-100 rounded-[2rem] p-8 group hover:border-rose-500/20 transition-all shadow-md">
+            <div class="flex items-center justify-between mb-6">
+                <div class="flex items-center">
+                    <div
+                        class="bg-rose-50 w-12 h-12 rounded-xl flex items-center justify-center mr-4 group-hover:scale-105 transition-transform">
+                        <i class="fas fa-triangle-exclamation text-rose-500 text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-extrabold text-navy font-display">Gaps Found</h3>
+                    </div>
+                </div>
+                <span class="bg-rose-500 text-white px-3 py-1 rounded-lg text-[10px] font-bold font-mono">
+                    {{ result.missing_skills|length }}
+                </span>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                {% for skill in result.missing_skills %}
+                <span
+                    class="bg-slate-50 text-slate-600 px-3 py-1.5 rounded-full font-bold text-xs border border-slate-100">
+                    {{ skill }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Recommendations Center -->
+    <div class="mb-12">
+        <div class="text-center lg:text-left mb-8">
+            <div class="text-[10px] font-bold text-slate-400 uppercase tracking-[0.2em] mb-2">Strategic Advice</div>
+            <h2 class="text-3xl font-extrabold font-display text-navy italic">Optimization Roadmap</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {% for category, tip in result.improvements.items() %}
+            <div
+                class="bg-white border border-slate-100 rounded-[1.5rem] p-6 shadow-sm relative overflow-hidden group hover:shadow-md transition-all">
+                <div class="relative z-10">
+                    <div class="text-[10px] font-bold text-primary uppercase tracking-widest mb-3 italic">{{ category }}
+                    </div>
+                    <p class="text-slate-600 font-medium text-sm leading-relaxed italic">"{{ tip }}"</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Call to Action Footer -->
+    <div class="bg-navy rounded-[3rem] p-10 lg:p-16 text-center relative overflow-hidden shadow-xl">
+        <div class="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent"></div>
+        <h2 class="text-2xl md:text-4xl font-extrabold font-display text-white mb-8 relative z-10">
+            Ready for a full <span class="italic text-primary">renovation?</span>
+        </h2>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 relative z-10">
+            <form method="POST" action="/rewrite">
+                <button type="submit"
+                    class="btn btn-primary px-12 py-5 rounded-full text-lg shadow-2xl shadow-emerald-500/20">
+                    <i class="fas fa-magic mr-3"></i> Rewrite with AI
+                </button>
+            </form>
+            <a href="{{ url_for('dashboard.dashboard') }}"
+                class="btn-secondary btn px-12 py-5 rounded-full text-lg border border-white/10">
+                Cancel & Return
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

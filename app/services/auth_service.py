@@ -1,4 +1,4 @@
-from db.supabase_client import supabase
+from app.db.supabase_client import supabase
 # from supabase_auth.errors import AuthApiError
 
 

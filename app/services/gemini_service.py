@@ -1,6 +1,6 @@
 import os
 from google import genai
-from config import Config
+from app.config import Config
 
 client = genai.Client(api_key=Config.GEMINI_API_KEY)
 

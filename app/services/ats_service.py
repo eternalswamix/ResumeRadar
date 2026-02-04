@@ -1,6 +1,6 @@
 from google import genai
-from config import Config
-from utils.prompts import ats_prompt, rewrite_prompt
+from app.config import Config
+from app.utils.prompts import ats_prompt, rewrite_prompt
 import json
 import re
 

@@ -1,0 +1,43 @@
+{% extends "layout.html" %}
+
+{% block title %}Complete Profile | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl mx-auto py-12 px-4 relative">
+    <div
+        class="relative bg-white border border-slate-100 rounded-[2.5rem] p-8 md:p-12 shadow-2xl animate-fadeInScale overflow-hidden">
+        <!-- Brand Header -->
+        <div class="text-center mb-10">
+            <div
+                class="bg-emerald-50 w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-6 group hover:rotate-6 transition-transform">
+                <img src="{{ url_for('static', filename='image/logo.png') }}" alt="Logo" class="w-8 h-8 object-contain">
+            </div>
+            <h1 class="text-3xl font-extrabold font-display text-navy mb-2 italic">Elite <span
+                    class="text-primary italic">Profiling</span></h1>
+            <p class="text-slate-400 font-medium text-xs">Help Gemini architect your professional legacy.</p>
+        </div>
+
+        <form method="POST" class="space-y-5">
+            <div>
+                <label for="bio"
+                    class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-4 flex items-center">
+                    <span class="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center mr-2 text-primary">
+                        <i class="fas fa-quote-left text-[8px]"></i>
+                    </span>
+                    Professional Narrative
+                </label>
+                <textarea id="bio" name="bio" rows="5" required
+                    class="block w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-2xl focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-sm leading-relaxed resize-none"
+                    placeholder="Architect your brief bio..."></textarea>
+            </div>
+
+            <div class="pt-4">
+                <button type="submit"
+                    class="w-full btn btn-primary py-4 rounded-full text-base font-bold shadow-xl shadow-emerald-500/10 hover:translate-y-[-1px] active:translate-y-0 transition-all">
+                    Finalize Identity
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

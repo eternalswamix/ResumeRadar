@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+
+{% block title %}Upload Resume | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto py-12 px-4">
+    <div class="mb-10 text-center lg:text-left">
+        <div
+            class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-emerald-600 text-[9px] font-bold uppercase tracking-widest mb-4 border border-emerald-100">
+            <i class="fas fa-file-export mr-2"></i> Input
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold font-display text-navy mb-3 italic">
+            New Audit
+        </h1>
+        <p class="text-slate-500 text-sm font-medium">
+            Upload credentials and target description for immediate AI benchmarking.
+        </p>
+    </div>
+
+    <form method="POST" action="/analyze" enctype="multipart/form-data" class="space-y-6">
+        <!-- Horizontal Dropzone -->
+        <div class="bg-white border border-slate-100 rounded-[2rem] p-2 shadow-lg">
+            <div id="drop-zone"
+                class="relative group cursor-pointer border-2 border-dashed border-slate-100 rounded-[1.5rem] p-8 lg:p-12 flex flex-col lg:flex-row items-center gap-8 hover:bg-emerald-50/20 transition-all">
+                <input id="resume" name="resume" type="file" accept=".pdf,.docx" class="sr-only" required>
+
+                <div
+                    class="bg-primary text-white w-16 h-16 rounded-2xl flex items-center justify-center shrink-0 shadow-lg shadow-emerald-500/10 group-hover:scale-105 transition-transform">
+                    <i class="fas fa-cloud-arrow-up text-xl"></i>
+                </div>
+
+                <div class="flex-grow text-center lg:text-left">
+                    <h3 class="text-xl font-extrabold text-navy mb-1">Resume Document</h3>
+                    <p class="text-slate-400 font-medium text-xs mb-3">Drag PDF/DOCX or browse.</p>
+                    <div id="file-name" class="hidden animate-fadeInScale">
+                        <span
+                            class="inline-flex items-center bg-navy text-white px-3 py-1 rounded-full text-[9px] font-bold uppercase tracking-widest">
+                            <i class="fas fa-file-check mr-2 text-emerald-400"></i> Locked In
+                        </span>
+                        <p class="text-primary font-bold mt-1 text-xs italic"></p>
+                    </div>
+                </div>
+
+                <div class="hidden lg:block shrink-0 px-10 border-l border-slate-100 italic">
+                    <p class="text-xs font-bold text-slate-300 uppercase tracking-widest mb-1">Max Weight</p>
+                    <p class="text-xl font-extrabold text-slate-400 tracking-tighter">10MB</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Horizontal Text Input -->
+        <div class="bg-white border border-slate-100 rounded-[2rem] p-8 shadow-lg overflow-hidden relative">
+            <div class="absolute top-0 right-0 p-6 opacity-5 -mr-4 -mt-4">
+                <i class="fas fa-briefcase text-[5rem]"></i>
+            </div>
+
+            <div class="relative z-10">
+                <label for="job_description"
+                    class="block text-[10px] font-bold text-navy uppercase tracking-[0.2em] mb-4 flex items-center">
+                    <span class="w-6 h-6 rounded-full bg-emerald-50 flex items-center justify-center mr-2">
+                        <i class="fas fa-align-left text-primary text-[8px]"></i>
+                    </span>
+                    Description
+                </label>
+
+                <textarea id="job_description" name="job_description" rows="6" required
+                    class="block w-full px-5 py-5 bg-slate-50 border border-slate-100 rounded-[1.5rem] focus:ring-2 focus:ring-primary/5 focus:border-primary focus:bg-white transition-all outline-none text-slate-600 font-medium text-sm leading-relaxed resize-none"
+                    placeholder="Paste the target JD requirements..."></textarea>
+            </div>
+        </div>
+
+        <div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-2">
+            <a href="{{ url_for('dashboard.dashboard') }}"
+                class="text-slate-400 font-bold hover:text-navy transition-colors flex items-center text-[10px] uppercase tracking-widest">
+                <i class="fas fa-arrow-left-long mr-2"></i> Abort
+            </a>
+            <button type="submit"
+                class="w-full sm:w-auto btn btn-primary px-10 py-3.5 rounded-full text-base font-bold shadow-xl shadow-emerald-500/10">
+                Initiate Analysis <i class="fas fa-sparkles ml-2 text-emerald-200"></i>
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const fileInput = document.getElementById('resume');
+    const dropZone = document.getElementById('drop-zone');
+    const fileNameDisplay = document.getElementById('file-name');
+    const fileNameText = fileNameDisplay.querySelector('p');
+
+    dropZone.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length > 0) {
+            updateFileName(e.target.files[0].name);
+        }
+    });
+
+    ['dragover', 'dragleave', 'drop'].forEach(event => {
+        dropZone.addEventListener(event, (e) => {
+            e.preventDefault();
+            if (event === 'dragover') dropZone.classList.add('bg-emerald-50/50');
+            else dropZone.classList.remove('bg-emerald-50/50');
+        });
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+        const file = e.dataTransfer.files[0];
+        if (file && (file.type === 'application/pdf' || file.name.endsWith('.docx'))) {
+            fileInput.files = e.dataTransfer.files;
+            updateFileName(file.name);
+        }
+    });
+
+    function updateFileName(name) {
+        fileNameText.textContent = name;
+        fileNameDisplay.classList.remove('hidden');
+    }
+</script>
+{% endblock %}

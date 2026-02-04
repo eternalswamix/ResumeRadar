@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block title %}Resume Rewrite | ResumeRadar{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto py-12 px-4">
+    <!-- Header -->
+    <div class="text-center lg:text-left mb-10">
+        <div
+            class="inline-flex items-center px-3 py-1 rounded-full bg-emerald-50 text-primary text-[9px] font-bold uppercase tracking-widest mb-4 border border-emerald-100">
+            <i class="fas fa-sparkles mr-2"></i> AI Generation
+        </div>
+        <h1 class="text-3xl md:text-4xl font-extrabold font-display text-navy mb-3 italic">
+            Renovated <span class="text-primary">Content</span>
+        </h1>
+        <p class="text-slate-500 text-sm font-medium max-w-xl leading-relaxed">
+            Redesigned professional narrative for high-impact, ATS-optimized performance.
+        </p>
+    </div>
+
+    <!-- Horizontal Rewrite Card -->
+    <div class="bg-white border border-slate-100 rounded-[2rem] p-1.5 shadow-xl overflow-hidden mb-10">
+        <div class="bg-navy px-8 py-4 flex items-center justify-between rounded-t-[1.5rem]">
+            <div class="flex items-center space-x-2">
+                <div class="flex space-x-1 mr-4">
+                    <div class="w-1.5 h-1.5 rounded-full bg-red-500/50"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-amber-500/50"></div>
+                    <div class="w-1.5 h-1.5 rounded-full bg-emerald-500/50"></div>
+                </div>
+                <span class="text-slate-500 text-[9px] font-mono tracking-widest uppercase">optimized_resume.md</span>
+            </div>
+            <button id="copy-btn"
+                class="bg-white/5 text-slate-400 hover:text-white hover:bg-white/10 px-4 py-1.5 rounded-full transition-all text-[9px] font-bold uppercase tracking-widest border border-white/5 flex items-center">
+                <i class="fas fa-copy mr-2"></i> Copy
+            </button>
+        </div>
+
+        <div class="p-8 lg:p-14 bg-white min-h-[500px] leading-relaxed text-slate-600 font-medium whitespace-pre-wrap selection:bg-emerald-100 selection:text-emerald-900 text-base"
+            id="improved-content">
+            {{ improved }}
+        </div>
+    </div>
+
+    <!-- Renovated Footer Actions -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+        <div class="bg-emerald-50 border border-emerald-100 rounded-[2.5rem] p-10 flex flex-col justify-center">
+            <h4 class="text-navy font-extrabold text-xl mb-6 flex items-center">
+                <i class="fas fa-info-circle text-primary mr-4"></i> Expert Protocol
+            </h4>
+            <div class="space-y-4">
+                <div class="flex items-start">
+                    <div class="bg-white w-6 h-6 rounded-full shrink-0 flex items-center justify-center mr-4 shadow-sm">
+                        <span class="text-primary font-bold text-[10px]">01</span>
+                    </div>
+                    <p class="text-slate-600 text-sm font-medium">Verify your contact details and dates for absolute
+                        precision.</p>
+                </div>
+                <div class="flex items-start">
+                    <div class="bg-white w-6 h-6 rounded-full shrink-0 flex items-center justify-center mr-4 shadow-sm">
+                        <span class="text-primary font-bold text-[10px]">02</span>
+                    </div>
+                    <p class="text-slate-600 text-sm font-medium">Export to Word/Docs using 11pt fonts for perfect
+                        readability.</p>
+                </div>
+            </div>
+        </div>
+
+        <div
+            class="bg-white border border-slate-100 rounded-[2.5rem] p-10 flex flex-col items-center justify-center gap-6">
+            <a href="{{ url_for('dashboard.dashboard') }}"
+                class="w-full btn btn-primary py-5 rounded-full text-lg shadow-xl shadow-emerald-500/10">
+                <i class="fas fa-arrow-left-long mr-4 text-xs"></i> Dashboard
+            </a>
+            <a href="{{ url_for('resume.upload') }}"
+                class="w-full btn-secondary btn py-5 rounded-full text-lg font-bold">
+                New Analysis <i class="fas fa-rotate-right ml-4 text-xs"></i>
+            </a>
+        </div>
+    </div>
+</div>
+
+<script>
+    const copyBtn = document.getElementById('copy-btn');
+    const content = document.getElementById('improved-content');
+
+    copyBtn.addEventListener('click', () => {
+        navigator.clipboard.writeText(content.innerText).then(() => {
+            const originalText = copyBtn.innerHTML;
+            copyBtn.innerHTML = '<i class="fas fa-check text-emerald-400 mr-3"></i> Copied!';
+            copyBtn.classList.add('bg-emerald-500/10', 'border-emerald-500/20');
+
+            setTimeout(() => {
+                copyBtn.innerHTML = originalText;
+                copyBtn.classList.remove('bg-emerald-500/10', 'border-emerald-500/20');
+            }, 2000);
+        });
+    });
+</script>
+{% endblock %}

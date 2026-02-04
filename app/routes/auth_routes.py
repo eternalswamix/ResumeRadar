@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session, flash
-from db.supabase_client import supabase
-from services.auth_service import (
+from app.db.supabase_client import supabase
+from app.services.auth_service import (
     login_with_username,
     signup_user,
     google_oauth_login,

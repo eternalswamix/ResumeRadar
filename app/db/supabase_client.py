@@ -1,5 +1,5 @@
 from supabase import create_client
-from config import Config
+from app.config import Config
 
 supabase = create_client(
     Config.SUPABASE_URL,
